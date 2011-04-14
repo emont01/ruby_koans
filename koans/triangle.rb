@@ -14,6 +14,7 @@
 #   about_triangle_project_2.rb
 #
 def triangle(a, b, c)
+    validate(a, b, c)
     triangle_type = :isosceles
     if a == b and a == c
         triangle_type = :equilateral
@@ -22,6 +23,16 @@ def triangle(a, b, c)
         triangle_type = :scalene
     end
     return triangle_type
+end
+
+def validate(a, b, c)
+    #triangle inequality theorem for validating sides sizes http://www.onlinemathlearning.com/triangle-inequality.html
+    if a <= 0 or b <= 0 or c <= 0
+        raise TriangleError
+    end 
+    if !((a+b)>c and (b+c)>a and (a+c)>b)
+        raise TriangleError
+    end
 end
 
 # Error class used in part 2.  No need to change this code.
