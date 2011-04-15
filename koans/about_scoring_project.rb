@@ -28,9 +28,43 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 # More scoring examples are given in the tests below:
 #
 # Your goal is to write the score method.
-
 def score(dice)
+    ones = dice.select { |num| num == 1}
+    fives = dice.select { |num| num == 5 }
+    total_score = get_score(ones, 1000, 100)
+    total_score += get_score(fives, 500, 50)
+    total_score += get_scores_for_non_one_or_five(dice)
   # You need to write this method
+end
+
+def get_score(array, trio_score, individual_score)
+    score_sum = 0;
+    while array.size >= 3
+        3.times { |n| array.shift }
+        score_sum += trio_score
+    end
+    while array.size > 0
+        array.shift
+        score_sum += individual_score
+    end
+    return score_sum
+end
+
+def get_scores_for_non_one_or_five(dice)
+    score_sum = 0
+    #any number in the dice array that is not 1, nor 5
+    no_one_or_five = dice.uniq.select{ |num| num != 1 and num != 5 }
+    #iterate over array and calculate how many groups of three numbers can be found
+    no_one_or_five.each { |item|
+
+        aux = dice.select { |num| num == item }
+        if aux.size > 0 and (aux.size % 3) == 0
+            #score: the number * quantity of groups of 3 elments * 100
+            score_sum += item * (aux.size / 3) * 100
+        end
+    }
+    #return number_score.inject(0) { |sum, num| sum += num }
+    return score_sum
 end
 
 class AboutScoringProject < EdgeCase::Koan
@@ -72,3 +106,4 @@ class AboutScoringProject < EdgeCase::Koan
   end
 
 end
+
