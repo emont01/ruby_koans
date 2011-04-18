@@ -27,14 +27,10 @@ end
 
 def validate(a, b, c)
     #triangle inequality theorem for validating sides sizes http://www.onlinemathlearning.com/triangle-inequality.html
-    if a <= 0 or b <= 0 or c <= 0
-        raise TriangleError
-    end 
-    if !((a+b)>c and (b+c)>a and (a+c)>b)
-        raise TriangleError
-    end
+    raise TriangleError unless ((a+b)>c and (b+c)>a and (a+c)>b)
 end
 
 # Error class used in part 2.  No need to change this code.
 class TriangleError < StandardError
 end
+
