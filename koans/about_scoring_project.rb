@@ -29,42 +29,26 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 #
 # Your goal is to write the score method.
 def score(dice)
-    ones = dice.select { |num| num == 1}
-    fives = dice.select { |num| num == 5 }
-    total_score = get_score(ones, 1000, 100)
-    total_score += get_score(fives, 500, 50)
-    total_score += get_scores_for_non_one_or_five(dice)
-  # You need to write this method
-end
-
-def get_score(array, trio_score, individual_score)
-    score_sum = 0;
-    while array.size >= 3
-        3.times { |n| array.shift }
-        score_sum += trio_score
-    end
-    while array.size > 0
-        array.shift
-        score_sum += individual_score
-    end
-    return score_sum
-end
-
-def get_scores_for_non_one_or_five(dice)
-    score_sum = 0
-    #any number in the dice array that is not 1, nor 5
-    no_one_or_five = dice.uniq.select{ |num| num != 1 and num != 5 }
-    #iterate over array and calculate how many groups of three numbers can be found
-    no_one_or_five.each { |item|
-
-        aux = dice.select { |num| num == item }
-        if aux.size > 0 and (aux.size % 3) == 0
-            #score: the number * quantity of groups of 3 elments * 100
-            score_sum += item * (aux.size / 3) * 100
-        end
+    # You need to write this method
+    score = dice.uniq.inject(0) { |sum, num|
+        sum += get_score2(dice, num)
     }
-    #return number_score.inject(0) { |sum, num| sum += num }
-    return score_sum
+    return score
+end
+def get_score2(dice, num)
+    trio_score = num*100
+    individual_score = 0
+    if num == 1
+        trio_score = 1000
+        individual_score = 100
+    end
+    if num == 5
+        individual_score = 50
+    end
+    num_count = dice.count(num)
+    trio_count = (num_count / 3).to_i
+    individual_count = num_count % 3
+    return trio_count * trio_score +  individual_count * individual_score
 end
 
 class AboutScoringProject < EdgeCase::Koan

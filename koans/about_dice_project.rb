@@ -3,10 +3,11 @@ require File.expand_path(File.dirname(__FILE__) + '/edgecase')
 # Implement a DiceSet Class here:
 #
 class DiceSet
+    attr_reader :values
+
     def roll(count)
-        result = []
-        count.times { result << 1 + rand(6) }
-        result
+        @values = []
+        count.times { @values << 1 + rand(6) }
     end
 end
 
